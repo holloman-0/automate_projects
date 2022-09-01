@@ -19,6 +19,23 @@ from selenium.webdriver.common.by import By
 # class introduced to start a webdriver
 from selenium.webdriver.chrome.service import Service
 
+from selenium.webdriver import ActionChains
+
+
+def selenium_setup():
+
+    # making the chrome tab invisible
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+    
+    # connecting to the terminal subprocess
+    x = "http://localhost:8888"
+    s=Service('/Users/jackyboy/Desktop/projects/automater/chromedriver/chromedriver')
+    browser = webdriver.Chrome(service=s)
+    browser.get(x)
+    return browser
+
+
 # delay to wait for pages to load (seconds)
 delay = 10
 
@@ -33,7 +50,6 @@ def wait_to_load( browser , locator , locator_name , mssge):
 
     try:
         feature = WebDriverWait(browser,delay).until(EC.presence_of_element_located(( locator , locator_name)))
-        successful_message(mssge)
         return feature
 
     except TimeoutException:
@@ -51,7 +67,6 @@ def wait_to_switch_window(browser , mssge):
 
     try:
         WebDriverWait(browser, delay).until(lambda d : len(d.window_handles) == 2)
-        successful_message(mssge)
     
     except TimeoutError:
         error_message(mssge)
@@ -60,7 +75,6 @@ def wait_to_read_title(browser , mssge):
 
     try:
         WebDriverWait(browser, delay).until(lambda d : len(d.title) != "")
-        successful_message(mssge)
     
     except TimeoutError:
         error_message(mssge)
@@ -80,11 +94,20 @@ def wait_to_load_multiple( browser , locator , locator_name , mssge):
 
     try:
         feature = WebDriverWait(browser,delay).until(EC.presence_of_all_elements_located(( locator , locator_name)))
-        successful_message(mssge)
         return feature
 
     except TimeoutException:
         error_message(mssge)
 
+
+def input_on_highlight( object , identicator , identicator_name , text):
+
+    wait_till_clickable(object , identicator , identicator_name , text)
+    object.find_element(identicator , identicator_name).click()
+    
+    # get active element highlighted
+    active = object.switch_to.active_element
+    active.send_keys(text)
+    active.send_keys(Keys.ESCAPE)
 
 
