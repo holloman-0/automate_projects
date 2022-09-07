@@ -30,21 +30,24 @@ def switch_windows(browser):
     wait_to_read_title(browser, "New Window loaded")
 
 
-def changing_name(browser):
+def changing_name(browser , sub_process):
 
-    user_name = input("*** --- Name of the new file? --- ***\n")
+    user_name = input("\n\n\n*** --- Name of the new file? --- ***\n\n\n")
 
-    # changing name
-    notebook = wait_till_clickable(browser , By.XPATH , "/html/body/div[3]/div[1]/span[1]/span[1]" , "Notebook")
-    notebook = wait_to_load(browser , By.XPATH , "/html/body/div[8]/div/div" , "Rename")
-    notebook.find_element(By.XPATH, "div[2]/div/input").send_keys(user_name)
-    notebook.find_element(By.XPATH, "div[3]/button[2]").send_keys(Keys.RETURN)
+    if (user_name == "666"):
+        close(browser , sub_process)
+    
+    else:
+        notebook = wait_till_clickable(browser , By.XPATH , "/html/body/div[3]/div[1]/span[1]/span[1]" , "Notebook")
+        notebook = wait_to_load(browser , By.XPATH , "/html/body/div[8]/div/div" , "Rename")
+        notebook.find_element(By.XPATH, "div[2]/div/input").send_keys(user_name)
+        notebook.find_element(By.XPATH, "div[3]/button[2]").send_keys(Keys.RETURN)
 
 
-def asking_user(browser):
+def asking_user(browser , sub_process):
 
     # creating formatting class
-    formatter = Jupyter_Formatter(browser)
+    formatter = Jupyter_Formatter(browser , sub_process)
 
     while True:
 
@@ -68,22 +71,32 @@ def asking_user(browser):
         elif(user_wants=="4"):
             picture_name = ask_user_name('Pictures')
             formatter.add_pictures(picture_name)
+        
+        elif(user_wants =="666"):
+            close(browser , sub_process)
+
 
         else:
             print("\n\n\nIncorrect input, try again !\n\n\n")
 
+def saving(browser):
 
-def close(browser , subprocess):
+    browser.find_element(By.XPATH, "/html/body/div[3]/div[3]/div[2]/div/div/div[1]/button").click()
+    print("Saved")
+
+
+def close(browser , subprocess ) :
 
     while True:
 
         user_input = input("\n\n\n**** --- 0:[EXIT PROGRAM] --- ***\n\n\n")
         time.sleep(1)
+        
         if (user_input == "0"):
             shut_down_host(subprocess)
             browser.close()
-            break
-        
+            quit()
+
         else:
             print("\n\n\nIncorrect input, try again !\n\n\n")
             

@@ -25,8 +25,8 @@ from selenium.webdriver import ActionChains
 def selenium_setup():
 
     # making the chrome tab invisible
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
+    chrome_options =  webdriver.ChromeOptions()
+    chrome_options.add_argument("--headless")
     
     # connecting to the terminal subprocess
     x = "http://localhost:8888"
